@@ -66,7 +66,7 @@ export default class LogIn extends React.Component {
 
   prueba(){
     let database = firebase.database().ref('seguimiento/prueba');
-    console.log("database: ", database)
+    console.log("database: ", database);
   }
   
   render() {
