@@ -1,0 +1,19 @@
+.operation{
+    background-color: gray;
+    border: 2px solid black;
+    text-align: center;
+  }
+   
+  .inputStyle{
+    text-align: center;
+    background-color: rgb(240, 235, 131);
+  }
+   
+  .outStyle{
+    text-align: center;
+    background-color: rgba(131, 240, 227, 0.83);
+  }
+
+  .number{
+      color: white;
+  }
