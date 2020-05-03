@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
 import firebase from './firebase.js';
 import './style.css';
 export default class LogIn extends React.Component {
@@ -65,7 +65,7 @@ export default class LogIn extends React.Component {
   }
 
   prueba(){
-    var database = firebase.database().ref('seguimiento/');
+    let database = firebase.database().ref('seguimiento/prueba');
     console.log("database: ", database)
   }
   
