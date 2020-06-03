@@ -1,6 +1,7 @@
 import * as React from 'react';
 import './style.css';
 import firebase from './firebase.js';
+import { changePage } from './index';
 
 
 
@@ -24,8 +25,12 @@ export default class LogIn extends React.Component {
         firebase.auth().signInWithEmailAndPassword(this.state.user,this.state.password)
         .then(() => {
           console.log("El usuario es correcto");
-          this.props.navigation.navigate("Operaciones.js");
-          console.log("enviando a operaciones");
+          //this.props.navigation.navigate("Operaciones.js");
+          //console.log("enviando a operaciones");
+          console.log("changePage: ",changePage);
+          console.log("changePage.valueOf: ",changePage.valueOf())
+          changePage = false;
+          console.log("changePage2: ",changePage);
         })
         .catch(error => {
           if (error.code === 'auth/email-already-in-use') {

@@ -1,17 +1,19 @@
 import * as React from 'react';
-import firebase from './firebase.js';
+import firebaseConf from './firebase.js';
 import './style.css';
+//import database from '@react-native-firebase/database';
 export default class LogIn extends React.Component {
   constructor(){
     super()
     this.state = { 
         user: "",
         password: "",
-        passwordRepeat: ""
+        passwordRepeat: "",
+        datos : []
     }
   }
 
-  login(){
+  register(){
       if(this.state.user.trim().length<=0){
         console.log("Debes escribir un nombre de usuario");
       }else{
@@ -24,10 +26,26 @@ export default class LogIn extends React.Component {
                 if(this.state.password !== this.state.passwordRepeat){
                     console.log("Debes escribir la misma contraseña");
                 }else{
-                    firebase.auth().createUserWithEmailAndPassword(this.state.user,this.state.password)
+                    firebaseConf.auth().createUserWithEmailAndPassword(this.state.user,this.state.password)
                     .then(() => {
-                    console.log("El usuario se ha creado correctamente");
-                    this.props.navigation.navigate("Operaciones");
+                      console.log("El usuario se ha creado correctamente");
+                      const db = firebaseConf.firestore().collection("seguimiento").doc(this.state.user);
+                      db.set({
+                        add1: false,
+                        add2: false,
+                        add3: false,
+                        substract1: false,
+                        substract2: false,
+                        substract3: false,
+                        multiply1: false,
+                        multiply2: false,
+                        multiply3: false,
+                        divide1: false,
+                        divide2: false,
+                        divide3: false
+                      })
+                      console.log("Añadido a la base de datos");
+                    //this.props.navigation.navigate("Operaciones");
                     }).catch(error => {
                         if (error.code === 'auth/email-already-in-use') {
                             console.log('That email address is already in use!');
@@ -64,9 +82,31 @@ export default class LogIn extends React.Component {
     this.setState ({passwordRepeat: event.target.value})
   }
 
-  prueba(){
-    let database = firebase.database().ref('seguimiento/prueba');
-    console.log("database: ", database);
+  prueba2 = e =>{
+    console.log("Entro en prueba2");
+    const db = firebaseConf.firestore();
+    const userRef =db.collection("seguimiento").doc("prueba");
+    userRef.get().then(function(doc) {
+      if (doc.exists) {
+          console.log("Datos 1º vez:", doc.data());
+          userRef.update({
+            suma1: true
+          });
+      } else {
+        console.log("No existe en la base de datos");
+      }
+    }).catch(function(error) {
+        console.log("Se ha producido un error:", error);
+    });
+    userRef.get().then(function(doc) {
+      if (doc.exists) {
+          console.log("Datos 2º vez:", doc.data());
+      } else {
+        console.log("No existe en la base de datos");
+      }
+    }).catch(function(error) {
+        console.log("Se ha producido un error:", error);
+    });
   }
   
   render() {
@@ -75,8 +115,8 @@ export default class LogIn extends React.Component {
         <input placeholder="email" type="text" value={this.state.user} onChange = {this.registerUser.bind(this)}></input>
         <input placeholder="password" type="password" value={this.state.password} onChange = {this.registerPassword.bind(this)}></input>
         <input placeholder="repeat the password" type="password" value={this.state.passwordRepeat} onChange = {this.registerPasswordRepeat.bind(this)}></input>
-        <button onClick={()=>{this.login()}} >Register</button>
-        <button onClick={()=>{this.prueba()}} >Mostrar</button>
+        <button onClick={()=>{this.register()}} >Register</button>
+        <button onClick={()=>{this.prueba2()}} >Mostrar</button>
       </div>
     )
   }
